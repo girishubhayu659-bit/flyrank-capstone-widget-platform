@@ -1,0 +1,46 @@
+# FlyRank Capstone Platform Manifest (Machine Evaluator Pack)
+version: "1.0"
+name: "flyrank-capstone-widget-platform"
+track: "backend"
+language: "python"
+framework: "fastapi"
+
+run: "uvicorn app.main:app --host 0.0.0.0 --port 8000"
+seed: "python scripts/seed_demo.py"
+test: "pytest tests/ -v"
+
+base_url: "http://localhost:8000"
+
+endpoints:
+  health:
+    path: "/health"
+    method: "GET"
+    expected_status: 200
+  script_delivery:
+    path: "/widget.js"
+    method: "GET"
+    expected_status: 200
+    cache_control: "public, max-age=86400, immutable"
+  public_config:
+    path: "/widgets/demo-widget-newsletter/config"
+    method: "GET"
+    expected_status: 200
+    cache_control: "public, max-age=60"
+  preflight_cors:
+    path: "/submissions"
+    method: "OPTIONS"
+    expected_status: 204
+  submission:
+    path: "/submissions"
+    method: "POST"
+    expected_status: 201
+  admin_widgets:
+    path: "/api/v1/widgets"
+    method: "GET"
+    auth: "Bearer flyrank_sec_demo_key_123"
+    expected_status: 200
+  dashboard_stats:
+    path: "/api/v1/dashboard/stats"
+    method: "GET"
+    auth: "Bearer flyrank_sec_demo_key_123"
+    expected_status: 200
